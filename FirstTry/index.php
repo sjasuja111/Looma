@@ -10,6 +10,16 @@
 		margin:10px;
 	}
 	</style>
+
+	<script>
+	function hello() {
+		console.log(document.getElementById("hiclass"));
+		document.getElementById("hiclass").remove();
+		// console.log(this);
+		// querySelector()
+		// this.parentNode.remove();
+	}
+	</script>
 </head>
 <body>
 
@@ -20,6 +30,7 @@ try
 	$db = $m->selectDB("example");
 	$col = $db->loomatest;
 }
+
 catch(MongoConnectionException $e)
 {
 	echo "Error connecting to MongoDB. Make sure you have run the command mongod --dbpath data/";
@@ -45,14 +56,32 @@ catch(MongoConnectionException $e)
 
 	echo "Displaying each document's object ID in little timeline-like divs... and its title! <br/>";
 
+
+	// $i = 0;
+	// foreach($cursor as $id => $value)
+	// {
+	// 	echo "<div class='timeline'>";													// starting little timeline div
+	// 	echo "<b>Object ID #" . $i . ":</b><br/>" . $id . "<br/>";						// listing that document's ID
+	// 	echo "<b>Content:</b><br/> '" . $value["title"] . "' by " . $value["author"];	// listing "title" name of that document
+	// 	$i++;
+	// 	echo "</div>";																	// ending little timeline div
+	// }
+
+	// COPY OBJECT IDS INTO AN ARRAY
 	$i = 0;
+	$objectIdArray = [];
 	foreach($cursor as $id => $value)
 	{
+		$objectIdArray[$i] = $id; 
+		$i++;	
+	}
+
+	// GENERATE DIVS FROM OBJECT ID ARRAY
+	for($i=0; $i<count($objectIdArray); $i++) {
 		echo "<div class='timeline'>";													// starting little timeline div
-		echo "<b>Object ID #" . $i . ":</b><br/>" . $id . "<br/>";						// listing that document's ID
-		echo "<b>Content:</b><br/> '" . $value["title"] . "' by " . $value["author"];	// listing "title" name of that document
-		$i++;
-		echo "</div>";																	// ending little timeline div
+		echo "<b>Object ID #" . $i . ":</b><br/>" . $objectIdArray[$i] . "<br/>";		// listing that document's ID
+		echo '<button id="hiclass" onclick="hello()">delete</button>';
+		echo "</div>";	
 	}
 
 ?>
